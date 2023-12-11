@@ -1,13 +1,8 @@
 import express from 'express';
+import { proyectosHome } from '../controllers/proyectosController.js';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('From /home');
-});
-
-router.get('/example', (req, res) => {
-    res.send('From /example');
-});
+router.get('/', proyectosHome);
 
 export default router;
