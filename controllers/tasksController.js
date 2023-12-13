@@ -26,7 +26,7 @@ const newTask = async(req, res) => {
         res.status(201).send(newTask);
     } catch (error) {
         console.log(error)
-        res.status(400)
+        res.status(400);
     }
 }
 
