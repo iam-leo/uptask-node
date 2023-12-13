@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import { db } from '../config/db.js';
 import slug from "slug";
+import shortid from "shortid";
 
 export const Tasks = db.define('tasks', {
     id: {
@@ -26,7 +27,7 @@ export const Tasks = db.define('tasks', {
     hooks: {
         beforeCreate(newTask) {
             const url = slug(newTask.title).toLocaleLowerCase();
-            newTask.url = url;
+            newTask.url = `${url}-${shortid.generate()}`;
         }
     }
 })
