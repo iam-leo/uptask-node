@@ -1,8 +1,11 @@
+import { Tasks } from "../models/Tasks.js";
+import { createTask } from "../services/taskService.js";
+
 const tasksHome = (req, res) => {
     res.send('From /home');
 }
 
-const newTask = (req, res) => {
+const newTask = async(req, res) => {
     // Validar que el input contenga algo
     const {task} = req.body
 
@@ -15,10 +18,15 @@ const newTask = (req, res) => {
     //Si hay errores
     if (errores.length > 0) {
         res.status(400).send(errores);
-    } else{
-        // No hay errores. Insertar en la DB
-        
-        res.status(200).send({message: 'Se ha creado la tarea correctamente'});
+    }
+
+    //Si no hay errores
+    try {
+        const newTask = await createTask(task, '', 0);
+        res.status(201).send(newTask);
+    } catch (error) {
+        console.log(error)
+        res.status(400)
     }
 }
 
