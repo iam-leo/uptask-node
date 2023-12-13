@@ -1,4 +1,3 @@
-import { Tasks } from "../models/Tasks.js";
 import { createTask } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {

@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
-import { db } from '../config/db.js'
+import { db } from '../config/db.js';
+import slug from "slug";
 
 export const Tasks = db.define('tasks', {
     id: {
@@ -21,5 +22,11 @@ export const Tasks = db.define('tasks', {
 }, {
     modelName: 'tasks',
     createdAt: false,
-    updatedAt: false
+    updatedAt: false,
+    hooks: {
+        beforeCreate(newTask) {
+            const url = slug(newTask.title).toLocaleLowerCase();
+            newTask.url = url;
+        }
+    }
 })
