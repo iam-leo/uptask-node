@@ -1,11 +1,18 @@
 import express from "express";
-import routes from './routes/index.js'
+import routes from './routes/index.js';
+import { db } from "./config/db.js";
+import "./models/Tasks.js";
 
-//import bodyParser from 'body-parser'
+// Crear conexion DB (tambien crea las tablas)
+db.sync()
+    .then(() => {
+        console.log("Conexion exitosa a la base de datos");
+    })
+    .catch(err => {
+        console.log(err);
+    })
 
 const app = express();
-
-//app.use(bodyParser.urlencoded({ extended: true }));
 
 // Analizar cuerpos JSON (no body parser)
 app.use(express.json())
