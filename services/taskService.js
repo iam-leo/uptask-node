@@ -21,6 +21,16 @@ const createTask = async (title, url, completed) => {
     }
 }
 
+const getAllTasks = async () =>{
+    try {
+        const tasks = await Tasks.findAll();
+        return tasks;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
-    createTask
+    createTask,
+    getAllTasks
 }

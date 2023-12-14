@@ -1,4 +1,4 @@
-import { createTask } from "../services/taskService.js";
+import { createTask, getAllTasks } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {
     res.send('From /home');
@@ -29,7 +29,17 @@ const newTask = async(req, res) => {
     }
 }
 
+const allTask = async (req, res) => {
+    try {
+        const tasks = await getAllTasks();
+        res.status(200).send(tasks);
+    } catch (error) {
+        res.status(400);
+    }
+}
+
 export {
     tasksHome,
-    newTask
+    newTask,
+    allTask
 }
