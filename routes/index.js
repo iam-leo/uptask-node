@@ -2,6 +2,7 @@ import express from 'express';
 import { allTask, getSubtasksForTask, newTask, taskByUrl, taskToDelete, tasksHome, updateTask } from '../controllers/tasksController.js';
 import { body } from 'express-validator';
 import { deleteSubtask, newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
+import { newUser } from '../controllers/usersController.js';
 
 const router = express.Router();
 
@@ -21,5 +22,8 @@ router.delete('/task/subtask/:id', deleteSubtask);
 /* router.post('/new-subtask', body('subtask').notEmpty().trim().escape(), newSubtask);
 router.put('/edit-subtask/:id', body('subtask').notEmpty().trim().escape(), updateSubtask);
 router.delete('/delete-subtask/:id', subtaskToDelete); */
+
+// Crear Usuario
+router.post('/new-user', newUser);
 
 export default router;

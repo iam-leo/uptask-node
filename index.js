@@ -3,6 +3,7 @@ import routes from './routes/index.js';
 import { db } from "./config/db.js";
 import "./models/Tasks.js";
 import "./models/Subtasks.js";
+import "./models/Users.js";
 
 // Crear conexion DB (tambien crea las tablas)
 db.sync()
