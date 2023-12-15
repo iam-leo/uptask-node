@@ -1,4 +1,4 @@
-import { createTask, deleteTask, editTask, getAllTasks, getTaskByUrl } from "../services/taskService.js";
+import { createTask, deleteTask, editTask, getAllTasks, getSubtasksByTaskId, getTaskByUrl } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {
     res.send('From /home');
@@ -88,11 +88,23 @@ const taskToDelete = ( req, res ) => {
     }
 }
 
+const getSubtasksForTask = async ( req, res ) => {
+    const {id} = req.params;
+
+    try {
+        const subtasks = await getSubtasksByTaskId(id);
+        res.status(200).send(subtasks);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+}
+
 export {
     tasksHome,
     newTask,
     allTask,
     taskByUrl,
     updateTask,
-    taskToDelete
+    taskToDelete,
+    getSubtasksForTask
 }

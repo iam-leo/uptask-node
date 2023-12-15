@@ -1,4 +1,5 @@
 import { Tasks } from "../models/Tasks.js";
+import { Subtasks } from "../models/Subtasks.js";
 
 const createTask = async (title, url, completed) => {
     try {
@@ -74,10 +75,30 @@ const deleteTask = async ( id ) => {
     }
 }
 
+// Obtener subtareas de una tarea
+const getSubtasksByTaskId = async (taskId) => {
+    try {
+        const subtasks = await Subtasks.findAll({
+            where: { taskId: taskId },
+            // Incluir a que tarea corresponden las subtareas (de ser necesario)
+            /*include: [
+                {
+                    model: Tasks,
+                    as: 'task'
+                }
+            ]*/
+        });
+        return subtasks;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     createTask,
     getAllTasks,
     getTaskByUrl,
     editTask,
-    deleteTask
+    deleteTask,
+    getSubtasksByTaskId
 }
