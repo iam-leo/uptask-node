@@ -1,4 +1,4 @@
-import { createSubtask, subtaskIsCompleted } from "../services/subtasksService.js";
+import { createSubtask, deleteSubtasks, subtaskIsCompleted } from "../services/subtasksService.js";
 
 const newSubtask = async ( req, res ) => {
     const { id } = req.params;
@@ -37,7 +37,19 @@ const subtaskCompleted = async ( req, res ) => {
     }
 }
 
+const deleteSubtask = async ( req, res ) => {
+    const { id } = req.params;
+
+    try {
+        const subtaskDeleted = await deleteSubtasks(id);
+        res.status(201).send(subtaskDeleted);
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 export {
     newSubtask,
-    subtaskCompleted
+    subtaskCompleted,
+    deleteSubtask
 }

@@ -52,7 +52,22 @@ const subtaskIsCompleted = async (id) => {
     }
 }
 
+const deleteSubtasks = async ( id ) => {
+    try {
+        const subtask = await Subtasks.findOne({ where: { id: id } });
+
+        if (!subtask) {
+            throw new Error('Subtask not found');
+        }
+
+        await subtask.destroy();
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     createSubtask,
-    subtaskIsCompleted
+    subtaskIsCompleted,
+    deleteSubtasks
 }
