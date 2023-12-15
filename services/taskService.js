@@ -58,9 +58,26 @@ const editTask = async (id, title) => {
     }
 }
 
+const deleteTask = async ( id ) => {
+    try {
+        const task = await Tasks.findOne({ where: { id: id } });
+
+        if (!task) {
+            throw new Error('Task not found');
+        }
+
+        const taskDeleted = await task.destroy();
+
+        return taskDeleted;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     createTask,
     getAllTasks,
     getTaskByUrl,
-    editTask
+    editTask,
+    deleteTask
 }
