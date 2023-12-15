@@ -2,7 +2,7 @@ import express from 'express';
 import { allTask, getSubtasksForTask, newTask, taskByUrl, taskToDelete, tasksHome, updateTask } from '../controllers/tasksController.js';
 import { body } from 'express-validator';
 import { deleteSubtask, newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
-import { newUser } from '../controllers/usersController.js';
+import { login, newUser } from '../controllers/usersController.js';
 
 const router = express.Router();
 
@@ -23,7 +23,8 @@ router.delete('/task/subtask/:id', deleteSubtask);
 router.put('/edit-subtask/:id', body('subtask').notEmpty().trim().escape(), updateSubtask);
 router.delete('/delete-subtask/:id', subtaskToDelete); */
 
-// Crear Usuario
+// Users endpoints
 router.post('/new-user', newUser);
+router.post('/login', login);
 
 export default router;

@@ -1,4 +1,5 @@
 import { Users } from "../models/Users.js";
+import bcrypt from 'bcrypt-nodejs';
 
 const createUser = async (name, email, password) => {
     try {
@@ -21,6 +22,27 @@ const createUser = async (name, email, password) => {
     }
 }
 
+const userLogin = async (email, password) => {
+    try {
+        const user = await Users.findOne({ where: { email: email } });
+
+        if (!user) {
+            throw new Error('User not found!');
+        }
+
+        const isPasswordValid = await bcrypt.compareSync(password, user.password);
+
+        if (!isPasswordValid) {
+            throw new Error('Invalid password!');
+        }
+
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
-    createUser
+    createUser,
+    userLogin
 }
