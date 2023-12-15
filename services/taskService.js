@@ -30,7 +30,37 @@ const getAllTasks = async () =>{
     }
 }
 
+const getTaskByUrl = async (url) => {
+    try {
+        const task = await Tasks.findOne({ where: { url: url } });
+        return task;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const editTask = async (id, title) => {
+    try {
+        const task = await Tasks.findOne({ where: { id: id } });
+        console.log(id)
+
+        if (!task) {
+            throw new Error('Task not found');
+        }
+
+        task.title = title;
+
+        const taskUpdated = await task.save();
+
+        return taskUpdated;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     createTask,
-    getAllTasks
+    getAllTasks,
+    getTaskByUrl,
+    editTask
 }

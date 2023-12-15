@@ -1,4 +1,4 @@
-import { createTask, getAllTasks } from "../services/taskService.js";
+import { createTask, editTask, getAllTasks, getTaskByUrl } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {
     res.send('From /home');
@@ -11,7 +11,7 @@ const newTask = async(req, res) => {
     let errores = [];
 
     if (!task) {
-        errores.push({message: 'El campo task es requerido'});
+        errores.push({message: 'The task field is required'});
     }
 
     //Si hay errores
@@ -38,8 +38,49 @@ const allTask = async (req, res) => {
     }
 }
 
+const taskByUrl = async (req, res, next) => {
+    try {
+        const {url} = req.params;
+        const task = await getTaskByUrl(url);
+
+        if (!task) {
+            return res.status(404).send({message: 'Task not found!'});
+        }
+
+        res.status(200).send(task);
+    } catch (error) {
+        res.status(400);
+    }
+}
+
+const updateTask = async (req, res) => {
+    const {id} = req.params;
+    const {task} = req.body;
+
+    let errores = [];
+
+    if (!task) {
+        errores.push({message: 'The task field is required'});
+    }
+
+    //Si hay errores
+    if (errores.length > 0) {
+        res.status(400).send(errores);
+    }
+
+    //Si no hay errores
+    try{
+        const taskUpdated = await editTask(id, task);
+        res.status(200).send(taskUpdated);
+    } catch (error) {
+        res.status(400);
+    }
+}
+
 export {
     tasksHome,
     newTask,
-    allTask
+    allTask,
+    taskByUrl,
+    updateTask
 }
