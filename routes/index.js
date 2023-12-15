@@ -1,7 +1,7 @@
 import express from 'express';
 import { allTask, getSubtasksForTask, newTask, taskByUrl, taskToDelete, tasksHome, updateTask } from '../controllers/tasksController.js';
 import { body } from 'express-validator';
-import { newSubtask } from '../controllers/subtasksController.js';
+import { newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
 
 const router = express.Router();
 
@@ -16,6 +16,7 @@ router.delete('/delete-task/:id', taskToDelete);
 // Subtasks Endpoints
 router.post('/task/:id/new-subtask', newSubtask);
 router.get('/task/:id/all-subtasks', getSubtasksForTask);
+router.patch('/subtask/is-completed/:id', subtaskCompleted);
 /* router.post('/new-subtask', body('subtask').notEmpty().trim().escape(), newSubtask);
 router.put('/edit-subtask/:id', body('subtask').notEmpty().trim().escape(), updateSubtask);
 router.delete('/delete-subtask/:id', subtaskToDelete); */

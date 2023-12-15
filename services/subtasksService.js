@@ -34,6 +34,25 @@ const createSubtask = async (taskId, description, completed) => {
     }
 }
 
+const subtaskIsCompleted = async (id) => {
+    try {
+        const subtask = await Subtasks.findOne({ where: { id: id } });
+
+        if (!subtask) {
+            throw new Error('Subtask not found');
+        }
+
+        subtask.completed =!subtask.completed;
+
+        const subtaskUpdated = await subtask.save();
+
+        return subtaskUpdated;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
-    createSubtask
+    createSubtask,
+    subtaskIsCompleted
 }
