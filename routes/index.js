@@ -3,7 +3,7 @@ import { allTask, getSubtasksForTask, newTask, taskByUrl, taskToDelete, tasksHom
 import { body } from 'express-validator';
 import { deleteSubtask, newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
 import { login, newUser } from '../controllers/usersController.js';
-import { authUser, userAuthenticated } from '../controllers/authController.js';
+import { authUser, closeSession, userAuthenticated } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -27,5 +27,6 @@ router.delete('/delete-subtask/:id', subtaskToDelete); */
 // Users endpoints
 router.post('/new-user', newUser);
 router.post('/login', authUser ,login);
+router.get('/logout', closeSession);
 
 export default router;

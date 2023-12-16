@@ -13,7 +13,14 @@ const userAuthenticated = (req, res, next) => {
     res.status(400).send('Usuario no autenticado');
 }
 
+const closeSession = (req, res) => {
+    req.session.destroy( () => {
+        res.status(200).send('Session closed');
+    })
+}
+
 export{
     authUser,
-    userAuthenticated
+    userAuthenticated,
+    closeSession
 }
