@@ -34,7 +34,7 @@ const allTask = async (req, res) => {
         const tasks = await getAllTasks();
         res.status(200).send(tasks);
     } catch (error) {
-        res.status(400);
+        res.status(400).send(error.message);
     }
 }
 
