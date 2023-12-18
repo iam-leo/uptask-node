@@ -1,12 +1,16 @@
-import { createTask, deleteTask, editTask, getAllTasks, getSubtasksByTaskId, getTaskByUrl } from "../services/taskService.js";
+import { createTask, deleteTask, editTask, getAllTasksByUser, getSubtasksByTaskId, getTaskByUrl } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {
     res.send('From /home');
+    console.log(req.user.id)
 }
 
 const newTask = async(req, res) => {
     // Validar que el input contenga algo
     const {task} = req.body
+
+    // Obtener el usuario logeado
+    const userId = req.user.id;
 
     let errores = [];
 
@@ -21,7 +25,7 @@ const newTask = async(req, res) => {
 
     //Si no hay errores
     try {
-        const newTask = await createTask(task, '', 0);
+        const newTask = await createTask(task, '', 0, userId);
         res.status(201).send(newTask);
     } catch (error) {
         console.log(error)
@@ -29,9 +33,12 @@ const newTask = async(req, res) => {
     }
 }
 
-const allTask = async (req, res) => {
+const allTask = async(req, res) => {
     try {
-        const tasks = await getAllTasks();
+        // Obtener el usuario logeado
+        const userId = req.user.id;
+
+        const tasks = await getAllTasksByUser( userId );
         res.status(200).send(tasks);
     } catch (error) {
         res.status(400).send(error.message);
@@ -41,7 +48,10 @@ const allTask = async (req, res) => {
 const taskByUrl = async (req, res, next) => {
     try {
         const {url} = req.params;
-        const task = await getTaskByUrl(url);
+        // Obtener el usuario logeado
+        const userId = req.user.id;
+
+        const task = await getTaskByUrl(url, userId);
 
         if (!task) {
             return res.status(404).send({message: 'Task not found!'});

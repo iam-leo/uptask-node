@@ -1,7 +1,7 @@
 import { Tasks } from "../models/Tasks.js";
 import { Subtasks } from "../models/Subtasks.js";
 
-const createTask = async (title, url, completed) => {
+const createTask = async (title, url, completed, userId) => {
     try {
         const task = new Tasks();
 
@@ -13,6 +13,7 @@ const createTask = async (title, url, completed) => {
         task.title = title;
         task.url = url;
         task.completed = completed;
+        task.UserId = userId;
 
         const taskCreated = await task.save();
 
@@ -22,18 +23,18 @@ const createTask = async (title, url, completed) => {
     }
 }
 
-const getAllTasks = async () =>{
+const getAllTasksByUser = async ( userId ) =>{
     try {
-        const tasks = await Tasks.findAll();
+        const tasks = await Tasks.findAll({ where: { UserId: userId}});
         return tasks;
     } catch (error) {
         throw error;
     }
 }
 
-const getTaskByUrl = async (url) => {
+const getTaskByUrl = async (url, userId) => {
     try {
-        const task = await Tasks.findOne({ where: { url: url } });
+        const task = await Tasks.findOne({ where: { url: url, UserId: userId } });
         return task;
     } catch (error) {
         throw error;
@@ -96,7 +97,7 @@ const getSubtasksByTaskId = async (taskId) => {
 
 export {
     createTask,
-    getAllTasks,
+    getAllTasksByUser,
     getTaskByUrl,
     editTask,
     deleteTask,

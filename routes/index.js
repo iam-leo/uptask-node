@@ -9,17 +9,17 @@ const router = express.Router();
 
 // Tasks Endpoints
 router.get('/', userAuthenticated, tasksHome);
-router.get('/all-tasks', allTask)
-router.post('/new-task', body('task').notEmpty().trim().escape(), newTask);
-router.get('/task/:url', taskByUrl);
-router.put('/edit-task/:id', body('task').notEmpty().trim().escape(), updateTask);
-router.delete('/delete-task/:id', taskToDelete);
+router.get('/all-tasks', userAuthenticated, allTask)
+router.post('/new-task', body('task').notEmpty().trim().escape(), userAuthenticated, newTask);
+router.get('/task/:url', userAuthenticated, taskByUrl);
+router.put('/edit-task/:id', userAuthenticated, body('task').notEmpty().trim().escape(), updateTask);
+router.delete('/delete-task/:id', userAuthenticated, taskToDelete);
 
 // Subtasks Endpoints
-router.post('/task/:id/new-subtask', newSubtask);
+router.post('/task/:id/new-subtask', userAuthenticated, newSubtask);
 router.get('/task/:id/all-subtasks', userAuthenticated, getSubtasksForTask);
-router.patch('/task/subtask/is-completed/:id', subtaskCompleted);
-router.delete('/task/subtask/:id', deleteSubtask);
+router.patch('/task/subtask/is-completed/:id', userAuthenticated, subtaskCompleted);
+router.delete('/task/subtask/:id', userAuthenticated, deleteSubtask);
 /* router.post('/new-subtask', body('subtask').notEmpty().trim().escape(), newSubtask);
 router.put('/edit-subtask/:id', body('subtask').notEmpty().trim().escape(), updateSubtask);
 router.delete('/delete-subtask/:id', subtaskToDelete); */
