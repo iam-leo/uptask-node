@@ -3,7 +3,7 @@ import { allTask, getSubtasksForTask, newTask, taskByUrl, taskToDelete, tasksHom
 import { body } from 'express-validator';
 import { deleteSubtask, newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
 import { login, newUser } from '../controllers/usersController.js';
-import { authUser, closeSession, userAuthenticated } from '../controllers/authController.js';
+import { authUser, closeSession, userAuthenticated, sendToken, validatePassword, resetPassword } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -28,5 +28,10 @@ router.delete('/delete-subtask/:id', subtaskToDelete); */
 router.post('/new-user', newUser);
 router.post('/login', authUser ,login);
 router.get('/logout', closeSession);
+
+// Restablecer contraseña
+router.post('/reset-password', sendToken);
+router.get('/reset-password/:token', validatePassword);
+router.post('/reset-password/:token', resetPassword);
 
 export default router;

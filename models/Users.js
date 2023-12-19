@@ -20,6 +20,14 @@ export const Users = db.define('Users', {
     password: {
         type: Sequelize.STRING(60),
         allowNull: false
+    },
+    token: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    expiration: {
+        type: Sequelize.DATE,
+        allowNull: true
     }
 },{
     hooks: {
