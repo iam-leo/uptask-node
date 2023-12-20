@@ -20,9 +20,6 @@ router.post('/task/:id/new-subtask', userAuthenticated, newSubtask);
 router.get('/task/:id/all-subtasks', userAuthenticated, getSubtasksForTask);
 router.patch('/task/subtask/is-completed/:id', userAuthenticated, subtaskCompleted);
 router.delete('/task/subtask/:id', userAuthenticated, deleteSubtask);
-/* router.post('/new-subtask', body('subtask').notEmpty().trim().escape(), newSubtask);
-router.put('/edit-subtask/:id', body('subtask').notEmpty().trim().escape(), updateSubtask);
-router.delete('/delete-subtask/:id', subtaskToDelete); */
 
 // Users endpoints
 router.post('/new-user', newUser);

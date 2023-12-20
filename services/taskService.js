@@ -44,7 +44,6 @@ const getTaskByUrl = async (url, userId) => {
 const editTask = async (id, title) => {
     try {
         const task = await Tasks.findOne({ where: { id: id } });
-        console.log(id)
 
         if (!task) {
             throw new Error('Task not found');

@@ -29,7 +29,7 @@ const closeSession = (req, res) => {
 const sendToken = async (req, res) => {
     // verificar que el usuario existe
     const email = req.body.email;
-    console.log(email)
+
     try{
         const user = await getUserByEmail(email);
 

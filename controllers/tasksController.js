@@ -2,7 +2,6 @@ import { createTask, deleteTask, editTask, getAllTasksByUser, getSubtasksByTaskI
 
 const tasksHome = (req, res) => {
     res.send('From /home');
-    console.log(req.user.id)
 }
 
 const newTask = async(req, res) => {
@@ -28,7 +27,6 @@ const newTask = async(req, res) => {
         const newTask = await createTask(task, '', 0, userId);
         res.status(201).send(newTask);
     } catch (error) {
-        console.log(error)
         res.status(400);
     }
 }
