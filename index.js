@@ -7,6 +7,7 @@ import "./models/Users.js";
 import { passport } from "./config/passport.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+import { sendEmail } from "./helpers/sendEmail.js";
 
 // Crear conexion DB (tambien crea las tablas)
 db.sync()
@@ -35,6 +36,6 @@ app.use(passport.session());
 
 app.use('/', routes);
 
-app.listen(3000, () => {
+app.listen(3000, async () => {
     console.log("Server running on port 3000");
-})
+});
