@@ -22,6 +22,23 @@ const createUser = async (name, email, password) => {
     }
 }
 
+const confirmAccount = async (email) => {
+    try {
+        const user = await Users.findOne({ where: { email: email } });
+
+        if (!user) {
+            throw new Error('User not found!');
+        }
+
+        user.active = 1;
+        await user.save();
+
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const userLogin = async (email, password) => {
     try {
         const user = await Users.findOne({ where: { email: email } });
@@ -59,5 +76,6 @@ const getUserByEmail = async (email) => {
 export {
     createUser,
     userLogin,
-    getUserByEmail
+    getUserByEmail,
+    confirmAccount
 }

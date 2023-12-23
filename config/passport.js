@@ -13,10 +13,10 @@ passport.use(
         },
         async (req, email, password, done) => {
             try {
-                const user = await Users.findOne({ where: { email: email } });
+                const user = await Users.findOne({ where: { email: email, active: 1 } });
 
                 if (!user) {
-                    return done(null, false, { message: 'No existe el usuario' });
+                    return done(null, false, { message: 'No existe el usuario o no ha confirmado su cuenta aún' });
                 }
 
                 const isPasswordValid = await bcrypt.compareSync(password, user.password);

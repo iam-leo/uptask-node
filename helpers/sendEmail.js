@@ -1,11 +1,17 @@
 import sgMail from '@sendgrid/mail'
-import { htmlEmail } from './htmlMail.js';
+import { confirmAccountHtmlEmail, resetPasswordHtmlEmail } from './htmlMail.js';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //ES6
-export const sendEmail = (href, toUser, subject) => {
-    const html = htmlEmail(href);
+export const sendEmail = (href, toUser, subject, typeEmail) => {
+    let html;
+
+    if(typeEmail === 'confirm'){
+      html = confirmAccountHtmlEmail(href);
+    }else{
+      html = resetPasswordHtmlEmail(href);
+    }
 
     const msg = {
         to: toUser,
@@ -23,4 +29,3 @@ export const sendEmail = (href, toUser, subject) => {
               }
           });
 }
-

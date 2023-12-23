@@ -21,6 +21,10 @@ export const Users = db.define('Users', {
         type: Sequelize.STRING(60),
         allowNull: false
     },
+    active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
     token: {
         type: Sequelize.STRING,
         allowNull: true
@@ -30,6 +34,9 @@ export const Users = db.define('Users', {
         allowNull: true
     }
 },{
+    modelName: 'users',
+    createdAt: false,
+    updatedAt: false,
     hooks: {
         beforeCreate: async (user) => {
             user.password = await bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));

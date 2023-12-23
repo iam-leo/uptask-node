@@ -43,7 +43,7 @@ const sendToken = async (req, res) => {
         // Generar reset url
         const resetURL = `http://${req.headers.host}/reset-password/${user.token}`;
 
-        sendEmail(resetURL, user.email, 'Resetear password');
+        sendEmail(resetURL, user.email, 'Resetear password', 'reset-pass');
 
         //Enviar token
         res.status(200).send('Usuario existente')

@@ -1,4 +1,5 @@
-import { createUser, userLogin } from "../services/usersService.js";
+import { confirmAccount, createUser, userLogin } from "../services/usersService.js";
+import { sendEmail } from "../helpers/sendEmail.js";
 
 const newUser = async ( req, res ) => {
     const { name, email, password } = req.body;
@@ -25,6 +26,11 @@ const newUser = async ( req, res ) => {
 
     try {
         const newUser = await createUser(name, email, password);
+
+        // Generar reset url
+        const confirmURL = `http://${req.headers.host}/confirm-password/${newUser.email}`;
+
+        sendEmail(confirmURL, newUser.email, 'Confirmar cuenta', 'confirm');
 
         res.status(201).send(newUser);
     } catch (error) {
@@ -60,7 +66,24 @@ const login = async ( req, res ) => {
     }
 }
 
+const confirmAccountUser = async ( req, res ) => {
+    const { email } = req.params;
+
+    if (!email) {
+        return res.status(400).send({message: 'Email not valid!'});
+    }
+
+    try {
+        const user = await confirmAccount(email);
+
+        res.status(200).send('Account confirmed!');
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+}
+
 export {
     newUser,
+    confirmAccountUser,
     login
 }
