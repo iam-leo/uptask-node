@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { Users } from "../models/Users.js";
 import { Sequelize } from "sequelize";
 import  bcrypt from "bcrypt-nodejs";
+import { sendEmail } from "../helpers/sendEmail.js";
 
 const Op = Sequelize.Op;
 
@@ -42,6 +43,8 @@ const sendToken = async (req, res) => {
         // Generar reset url
         const resetURL = `http://${req.headers.host}/reset-password/${user.token}`;
 
+        sendEmail(resetURL, user.email, 'Resetear password');
+
         //Enviar token
         res.status(200).send('Usuario existente')
 
@@ -50,7 +53,7 @@ const sendToken = async (req, res) => {
     }
 }
 
-const validatePassword = async (req, res) => {
+const validateToken = async (req, res) => {
     try{
         const user = await Users.findOne({ where: { token: req.params.token } });
 
@@ -105,6 +108,6 @@ export{
     userAuthenticated,
     closeSession,
     sendToken,
-    validatePassword,
+    validateToken,
     resetPassword
 }
