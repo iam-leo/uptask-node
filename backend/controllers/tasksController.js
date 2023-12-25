@@ -1,7 +1,7 @@
 import { createTask, deleteTask, editTask, getAllTasksByUser, getSubtasksByTaskId, getTaskByUrl } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {
-    res.send('From /home');
+    res.send('Usuario autorizado');
 }
 
 const newTask = async(req, res) => {

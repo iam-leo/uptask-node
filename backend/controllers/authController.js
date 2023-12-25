@@ -8,10 +8,24 @@ import { sendEmail } from "../helpers/sendEmail.js";
 
 const Op = Sequelize.Op;
 
-const authUser = passport.authenticate('local', {
+/* const authUser = passport.authenticate('local', {
     failureRedirect: '/login',
     successRedirect: '/',
-});
+}); */
+
+const authUser = (req, res, next) => {
+    passport.authenticate('local', (err, user) => {
+        if (err || !user) {
+            return res.status(401).json({ message: 'Usuario no autenticado' });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error al iniciar sesión' });
+            }
+            return res.status(200).json({ message: 'Inicio de sesión exitoso' });
+        });
+    })(req, res, next);
+};
 
 const userAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {

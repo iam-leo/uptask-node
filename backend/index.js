@@ -7,7 +7,7 @@ import "./models/Users.js";
 import { passport } from "./config/passport.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import { sendEmail } from "./helpers/sendEmail.js";
+import cors from 'cors';
 
 // Crear conexion DB (tambien crea las tablas)
 db.sync()
@@ -24,6 +24,12 @@ const app = express();
 app.use(express.json());
 
 app.use(cookieParser());
+
+//Permitir CORS
+app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+  }));
 
 app.use(session({
     secret: 'supersecret',
