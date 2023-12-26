@@ -1,1 +1,40 @@
-<p>tasks works!</p>
+<div class="flex flex-col items-center justify-center w-full h-screen">
+    <div class="w-full max-w-5xl">
+        <ul class="flex flex-col items-center justify-center w-full">
+            @for(task of tasks; let i = $index; track i){
+                <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40"
+                 >
+                    <button (click)="taskIsCompleted(task.id)">
+                        @if(!task.completed){
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                            </svg>
+                        }
+                
+                        @if(task.completed){
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" fill="#ABFEA9" />
+                                <path d="M9 12l2 2l4 -4" />
+                            </svg>
+                        }
+                    </button>
+            
+                    <a class="cursor-pointer" [ngClass]=" task.completed ? 'line-through' : '' "> {{task.title}} </a>
+
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#e53737" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M4 7l16 0" />
+                            <path d="M10 11l0 6" />
+                            <path d="M14 11l0 6" />
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        </svg>
+                    </button>
+        </li>
+            }
+        </ul>
+    </div>
+</div>
