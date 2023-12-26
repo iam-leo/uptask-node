@@ -1,4 +1,4 @@
-import { createTask, deleteTask, editTask, getAllTasksByUser, getSubtasksByTaskId, getTaskByUrl } from "../services/taskService.js";
+import { createTask, deleteTask, editTask, getAllTasksByUser, getSubtasksByTaskId, getTaskByUrl, taskCompleted } from "../services/taskService.js";
 
 const tasksHome = (req, res) => {
     res.send('Usuario autorizado');
@@ -85,6 +85,17 @@ const updateTask = async (req, res) => {
     }
 }
 
+const taskIsCompleted = async ( req, res ) => {
+    const { id } = req.params;
+
+    try{
+        const taskIsCompleted = await taskCompleted(id)
+        res.status(201).send(taskIsCompleted);
+    } catch (error){
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 const taskToDelete = ( req, res ) => {
     const {id} = req.params;
 
@@ -114,5 +125,6 @@ export {
     taskByUrl,
     updateTask,
     taskToDelete,
-    getSubtasksForTask
+    getSubtasksForTask,
+    taskIsCompleted
 }

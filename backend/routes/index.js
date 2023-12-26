@@ -1,5 +1,5 @@
 import express from 'express';
-import { allTask, getSubtasksForTask, newTask, taskByUrl, taskToDelete, tasksHome, updateTask } from '../controllers/tasksController.js';
+import { allTask, getSubtasksForTask, newTask, taskByUrl, taskIsCompleted, taskToDelete, tasksHome, updateTask } from '../controllers/tasksController.js';
 import { body } from 'express-validator';
 import { deleteSubtask, newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
 import { confirmAccountUser, login, newUser } from '../controllers/usersController.js';
@@ -13,6 +13,7 @@ router.get('/all-tasks', userAuthenticated, allTask)
 router.post('/new-task', body('task').notEmpty().trim().escape(), userAuthenticated, newTask);
 router.get('/task/:url', userAuthenticated, taskByUrl);
 router.put('/edit-task/:id', userAuthenticated, body('task').notEmpty().trim().escape(), updateTask);
+router.patch('/task-is-completed/:id', userAuthenticated, taskIsCompleted)
 router.delete('/delete-task/:id', userAuthenticated, taskToDelete);
 
 // Subtasks Endpoints

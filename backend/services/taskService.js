@@ -59,6 +59,23 @@ const editTask = async (id, title) => {
     }
 }
 
+const taskCompleted = async ( id ) => {
+    try {
+        const task = await Tasks.findOne({ where: { id: id } });
+
+        if (!task) {
+            throw new Error('Task not found');
+        }
+
+        task.completed = !task.completed;
+        const taskCompleted = await task.save();
+
+        return taskCompleted;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const deleteTask = async ( id ) => {
     try {
         const task = await Tasks.findOne({ where: { id: id } });
@@ -100,5 +117,6 @@ export {
     getTaskByUrl,
     editTask,
     deleteTask,
-    getSubtasksByTaskId
+    getSubtasksByTaskId,
+    taskCompleted
 }
