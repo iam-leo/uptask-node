@@ -20,4 +20,8 @@ export class TasksService {
   taskIsCompleted(id: number): Observable<any>{
     return this.http.patch(`http://localhost:3000/task-is-completed/${id}`,{completed: null}, { withCredentials: true });
   }
+
+  deleteTask(id: number){
+    return this.http.delete(`http://localhost:3000/delete-task/${id}`, { withCredentials: true })
+  }
 }

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TasksService } from '../../services/tasks.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { concatMap, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'tasks',
@@ -14,19 +15,29 @@ export class TasksComponent implements OnInit {
   tasks: any[] = [];
   newTaskInput = '';
 
-  constructor( private _tasksService: TasksService ){}
+  constructor( private _tasksService: TasksService, private cd: ChangeDetectorRef ){}
+
   ngOnInit(): void {
-    this._tasksService.getAllTasks().subscribe({
+    this.refreshTasks();
+  }
+
+  refreshTasks() {
+    of(null).pipe(
+      switchMap(() => this._tasksService.getAllTasks())
+    ).subscribe({
       next: (res) => {
-        console.log(res)
-        this.tasks = res
+        this.tasks = res;
+        this.cd.detectChanges(); // Forzar la actualización de la vista
+      },
+      error: (err) => {
+        console.log(err);
       }
-    })
+    });
   }
 
   taskIsCompleted(id: number) {
     this._tasksService.taskIsCompleted(id).subscribe((data) => {
-      // Cambiar el estado en el front 
+      // Cambiar el estado en el front
       const task = this.tasks.find(task => task.id === id);
         if (task) {
             task.completed = !task.completed;
@@ -36,9 +47,24 @@ export class TasksComponent implements OnInit {
 
   addNewTask(task: string){
     this._tasksService.newTask(task).subscribe((newTask) => {
-      this.tasks.push(newTask);
+      this.refreshTasks();
       this.newTaskInput = '';
+      this.cd.detectChanges();
     })
+  }
+
+  deleteTask(id: number) {
+    this._tasksService.deleteTask(id).subscribe({
+      next: (response) => {
+        setTimeout(() => {
+          this.refreshTasks();
+        }, 200);
+        this.cd.detectChanges();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
 }
