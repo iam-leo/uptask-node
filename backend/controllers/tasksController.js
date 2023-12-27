@@ -101,7 +101,7 @@ const taskToDelete = ( req, res ) => {
 
     try {
         const taskDeleted = deleteTask(id);
-        res.status(200).send('Task successfully deleted!');
+        res.status(200).send({message: 'Task successfully deleted!'});
     } catch (error) {
         res.status(400);
     }
