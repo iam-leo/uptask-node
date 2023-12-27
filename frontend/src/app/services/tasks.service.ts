@@ -9,6 +9,10 @@ export class TasksService {
 
   constructor( private http: HttpClient ) { }
 
+  newTask(task: string): Observable<any>{
+    return this.http.post('http://localhost:3000/new-task', { task }, { withCredentials: true });
+  }
+
   getAllTasks(): Observable<any>{
     return this.http.get('http://localhost:3000/all-tasks', { withCredentials: true });
   }
