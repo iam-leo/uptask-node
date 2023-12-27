@@ -1,0 +1,44 @@
+<div class="flex flex-col items-center w-full h-screen">
+    <div class="w-full max-w-5xl mt-14">
+        <h2 class="mt-10 text-4xl font-medium text-white uppercase">Tarea: <span class="font-normal">{{task}}</span></h2>
+        @if(subtasks.length === 0){
+            <div class="p-5 text-white rounded-md my-14 bg-white/20">
+                <p class="text-2xl text-center">No tienes subtareas aquí. Empieza agregando una.</p>
+            </div>
+        }
+        <form class="flex items-center mb-10">
+            <label for="new-subtask" class="sr-only">Nueva subtarea</label>
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 icon icon-tabler icon-tabler-notes dark:text-gray-400 size-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+                        <path d="M9 7l6 0" />
+                        <path d="M9 11l6 0" />
+                        <path d="M9 15l4 0" />
+                    </svg>
+                </div>
+                <input
+                        
+                        type="text"
+                        id="new-subtask"
+                        name="new-subtask"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                        placeholder="Nueva tarea..."
+                        required>
+            </div>
+
+            <button
+                    
+                    class="inline-flex items-center py-2.5 px-3 ms-2 text-lg font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus size-7 me-2" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                    <path d="M9 12h6" />
+                    <path d="M12 9v6" />
+                  </svg>Agregar
+            </button>
+        </form>
+    </div>
+</div>

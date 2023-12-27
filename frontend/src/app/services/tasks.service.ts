@@ -17,6 +17,10 @@ export class TasksService {
     return this.http.get('http://localhost:3000/all-tasks', { withCredentials: true });
   }
 
+  getTaskByURL(url: string): Observable<any>{
+    return this.http.get(`http://localhost:3000/task/${url}`, { withCredentials: true });
+  }
+
   taskIsCompleted(id: number): Observable<any>{
     return this.http.patch(`http://localhost:3000/task-is-completed/${id}`,{completed: null}, { withCredentials: true });
   }

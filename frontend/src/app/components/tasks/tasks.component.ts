@@ -3,11 +3,12 @@ import { TasksService } from '../../services/tasks.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { concatMap, of, switchMap } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
