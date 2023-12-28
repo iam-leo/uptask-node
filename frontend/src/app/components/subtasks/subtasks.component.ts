@@ -3,11 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { SubtasksService } from '../../services/subtasks.service';
 import { of, switchMap } from 'rxjs';
 import { TasksService } from '../../services/tasks.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'subtasks',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './subtasks.component.html',
   styleUrl: './subtasks.component.css'
 })
@@ -22,6 +24,7 @@ export class SubtasksComponent implements OnInit{
   };
   task = '';
   subtasks: any[] = [];
+  newSubtaskInput = '';
 
   constructor(private route: ActivatedRoute, private _taskService: TasksService, private _subtasksService: SubtasksService, private cd: ChangeDetectorRef ) {}
 
@@ -31,11 +34,11 @@ export class SubtasksComponent implements OnInit{
       this.currentTask = task;
       this.task = task.title;
       console.log(this.currentTask);
+      this.refreshSubtasks();
     })
-    this.refreshTasks();
   }
 
-  refreshTasks() {
+  refreshSubtasks() {
     of(null).pipe(
       switchMap(() => this._subtasksService.getSubtasks(this.currentTask.id))
     ).subscribe({
@@ -48,6 +51,26 @@ export class SubtasksComponent implements OnInit{
         console.log(err);
       }
     });
+  }
+
+  addNewSubtask(newSubtask: string){
+    console.log(this.currentTask.id)
+    this._subtasksService.newSubtask(this.currentTask.id, this.newSubtaskInput).subscribe(() => {
+      this.refreshSubtasks();
+      this.newSubtaskInput = '';
+      this.cd.detectChanges();
+    });
+  }
+
+  subtaskIsCompleted(id: number) {
+    this._subtasksService.subtaskIsCompleted(id).subscribe((data) => {
+      // Cambiar el estado en el front
+      const subtask = this.subtasks.find(subtask => subtask.id === id);
+        if (subtask) {
+            subtask.completed = !subtask.completed;
+        }
+    });
+    console.log('Subtask is completed! ', id)
   }
 
 }
