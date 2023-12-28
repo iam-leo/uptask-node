@@ -33,7 +33,6 @@ export class SubtasksComponent implements OnInit{
     this._taskService.getTaskByURL(this.urlParam).subscribe((task) => {
       this.currentTask = task;
       this.task = task.title;
-      console.log(this.currentTask);
       this.refreshSubtasks();
     })
   }
@@ -44,7 +43,6 @@ export class SubtasksComponent implements OnInit{
     ).subscribe({
       next: (res) => {
         this.subtasks = res;
-        console.log(this.subtasks)
         this.cd.detectChanges(); // Forzar la actualización de la vista
       },
       error: (err) => {
@@ -54,7 +52,6 @@ export class SubtasksComponent implements OnInit{
   }
 
   addNewSubtask(newSubtask: string){
-    console.log(this.currentTask.id)
     this._subtasksService.newSubtask(this.currentTask.id, this.newSubtaskInput).subscribe(() => {
       this.refreshSubtasks();
       this.newSubtaskInput = '';
@@ -70,7 +67,19 @@ export class SubtasksComponent implements OnInit{
             subtask.completed = !subtask.completed;
         }
     });
-    console.log('Subtask is completed! ', id)
   }
 
+  deleteSubtask(id: number) {
+    this._subtasksService.deleteSubtask(id).subscribe({
+      next: (response) => {
+        setTimeout(() => {
+          this.refreshSubtasks();
+        }, 200);
+        this.cd.detectChanges();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
 }

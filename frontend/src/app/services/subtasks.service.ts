@@ -20,4 +20,8 @@ export class SubtasksService {
   subtaskIsCompleted(id: number): Observable<any>{
     return this.http.patch(`http://localhost:3000/task/subtask/is-completed/${id}`, {completed: null}, { withCredentials: true });
   }
+
+  deleteSubtask(id: number){
+    return this.http.delete(`http://localhost:3000/task/subtask/${id}`, { withCredentials: true })
+  }
 }
