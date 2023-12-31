@@ -1,5 +1,6 @@
 import { confirmAccount, createUser, userLogin } from "../services/usersService.js";
 import { sendEmail } from "../helpers/sendEmail.js";
+import 'dotenv/config';
 
 const newUser = async ( req, res ) => {
     const { name, email, password } = req.body;
@@ -76,7 +77,10 @@ const confirmAccountUser = async ( req, res ) => {
     try {
         const user = await confirmAccount(email);
 
-        res.status(200).send('Account confirmed!');
+        //res.status(200).send('Account confirmed!');
+        const urlApp = process.env.URL_APP;
+        const sanitizedName = user.name.replace(/\./g, '_');
+        res.redirect(`${urlApp}/account/${sanitizedName}`);
     } catch (error) {
         res.status(400).send(error.message);
     }
