@@ -21,7 +21,7 @@
                 name="password"
                 class="bg-gray-100 border border-gray-300 text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required>
-          <a href="#" class="block mt-2 text-right text-slate-600 hover:text-slate-800">¿Olvidaste tu contraseña?</a>
+          <a [routerLink]="['/reset-password']" class="block mt-2 text-right text-slate-600 hover:text-slate-800">¿Olvidaste tu contraseña?</a>
         </div>
         <button
                 (click)="login(email, password)"
