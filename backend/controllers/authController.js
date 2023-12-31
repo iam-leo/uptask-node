@@ -5,6 +5,7 @@ import { Users } from "../models/Users.js";
 import { Sequelize } from "sequelize";
 import  bcrypt from "bcrypt-nodejs";
 import { sendEmail } from "../helpers/sendEmail.js";
+import 'dotenv/config'
 
 const Op = Sequelize.Op;
 
@@ -44,7 +45,7 @@ const closeSession = (req, res) => {
 const sendToken = async (req, res) => {
     // verificar que el usuario existe
     const email = req.body.email;
-
+    console.log(email)
     try{
         const user = await getUserByEmail(email);
 
@@ -55,12 +56,13 @@ const sendToken = async (req, res) => {
 
 
         // Generar reset url
-        const resetURL = `http://${req.headers.host}/reset-password/${user.token}`;
+        const frontURL = process.env.URL_APP
+        const resetURL = `${frontURL}/reset-password/${user.token}`;
 
         sendEmail(resetURL, user.email, 'Resetear password', 'reset-pass');
 
         //Enviar token
-        res.status(200).send('Usuario existente')
+        res.status(200).send({ message: 'Usuario existente'})
 
     }catch (error){
         return res.status(400).send(error.message);
@@ -75,7 +77,7 @@ const validateToken = async (req, res) => {
             throw new Error('Usuario no encontrado');
         }
 
-        res.status(200).send('Token autorizado!');
+        res.status(200).send({ message: 'Token autorizado! '});
 
     }catch (error){
         return res.status(400).send(error.message);
@@ -111,7 +113,7 @@ const resetPassword = async (req, res) => {
 
         await user.save();
 
-        res.status(200).send('Contraseña restablecida');
+        res.status(200).send({ message: 'Contraseña restablecida'});
     } catch (error) {
         return res.status(400).send(error.message);
     }
