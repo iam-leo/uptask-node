@@ -1,4 +1,4 @@
-import { confirmAccount, createUser, userLogin } from "../services/usersService.js";
+import { confirmAccount, createUser, getUserById, userLogin } from "../services/usersService.js";
 import { sendEmail } from "../helpers/sendEmail.js";
 import 'dotenv/config';
 
@@ -86,8 +86,21 @@ const confirmAccountUser = async ( req, res ) => {
     }
 }
 
+const getNameUser = async ( req, res ) => {
+    // Obtener el usuario logeado
+    const userId = req.user.id;
+
+    try {
+        const user = await getUserById(userId);
+        res.status(200).send({ name: user.name });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+}
+
 export {
     newUser,
     confirmAccountUser,
-    login
+    login,
+    getNameUser
 }

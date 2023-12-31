@@ -2,7 +2,7 @@ import express from 'express';
 import { allTask, getSubtasksForTask, newTask, taskByUrl, taskIsCompleted, taskToDelete, tasksHome, updateTask } from '../controllers/tasksController.js';
 import { body } from 'express-validator';
 import { deleteSubtask, newSubtask, subtaskCompleted } from '../controllers/subtasksController.js';
-import { confirmAccountUser, login, newUser } from '../controllers/usersController.js';
+import { confirmAccountUser, getNameUser, login, newUser } from '../controllers/usersController.js';
 import { authUser, closeSession, userAuthenticated, sendToken, resetPassword, validateToken } from '../controllers/authController.js';
 
 const router = express.Router();
@@ -27,6 +27,7 @@ router.post('/new-user', newUser);
 router.get('/confirm-password/:email', confirmAccountUser)
 router.post('/login', authUser, login);
 router.get('/logout', closeSession);
+router.get('/name-user', getNameUser);
 
 // Restablecer contraseña
 router.post('/reset-password', sendToken);
