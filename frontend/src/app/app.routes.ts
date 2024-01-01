@@ -15,5 +15,6 @@ export const routes: Routes = [
     { path: 'new-account', component: NewUserComponent},
     { path: 'account/:name', component: AccountConfirmedComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
-    { path: 'reset-password/:token', component: NewPasswordComponent }
+    { path: 'reset-password/:token', component: NewPasswordComponent },
+    { path: '**', redirectTo: 'login'}
 ];

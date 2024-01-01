@@ -12,4 +12,8 @@ export class LoginService {
   login(credentials: object): Observable<any>{
     return this.http.post('http://localhost:3000/login', credentials, { withCredentials: true });
   }
+
+  logout(): Observable<any>{
+    return this.http.get('http://localhost:3000/logout');
+  }
 }
