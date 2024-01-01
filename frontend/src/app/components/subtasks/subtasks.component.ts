@@ -26,6 +26,8 @@ export class SubtasksComponent implements OnInit{
   task = '';
   subtasks: any[] = [];
   newSubtaskInput = '';
+  progressStatus = 0;
+  taskCompletedFlag = false;
 
   constructor(private route: ActivatedRoute, private _taskService: TasksService, private _subtasksService: SubtasksService, private cd: ChangeDetectorRef ) {}
 
@@ -83,4 +85,40 @@ export class SubtasksComponent implements OnInit{
       }
     });
   }
+
+  progressTask(){
+    if(this.subtasks.length > 0){
+      let completed = this.subtasks.filter(task => task.completed).length;
+
+      // Obtener porcentaje de subtareas completadas
+      this.progressStatus = Math.round((completed / this.subtasks.length) * 100);
+
+      // Si las subtareas llegaron al 100% y la bandera no está establecida, marcar tarea completada
+      if (this.progressStatus === 100 && !this.taskCompletedFlag) {
+        this.taskCompletedFlag = true;
+
+        // Cambiar estado de tarea incompleta a completa
+        this.taskCompleted();
+      } else if (this.progressStatus !== 100) {
+        // Si el progreso no es 100%, restablecer la bandera
+        this.taskCompletedFlag = false;
+
+        // Cambiar estado de tarea completa a incompleta
+        this.taskCompleted();
+      }
+
+      return this.progressStatus + '%';
+    } else {
+      return '0%';
+    }
+  }
+
+  taskCompleted(){
+    if(this.progressStatus == 100){
+      this._taskService.taskIsCompleted(this.currentTask.id).subscribe(() => {
+        console.log('Tarea completada');
+      })
+    }
+  }
+
 }
