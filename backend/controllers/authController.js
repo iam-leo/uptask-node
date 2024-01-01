@@ -38,7 +38,7 @@ const userAuthenticated = (req, res, next) => {
 
 const closeSession = (req, res) => {
     req.session.destroy( () => {
-        res.status(200).send('Session closed');
+        res.status(200).send({ message: 'Session closed' });
     })
 }
 
