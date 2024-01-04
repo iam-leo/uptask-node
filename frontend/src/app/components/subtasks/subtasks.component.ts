@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubtasksService } from '../../services/subtasks.service';
 import { of, switchMap } from 'rxjs';
 import { TasksService } from '../../services/tasks.service';
@@ -29,7 +29,7 @@ export class SubtasksComponent implements OnInit{
   progressStatus = 0;
   taskCompletedFlag = false;
 
-  constructor(private route: ActivatedRoute, private _taskService: TasksService, private _subtasksService: SubtasksService, private cd: ChangeDetectorRef ) {}
+  constructor(private route: ActivatedRoute, private router: Router, private _taskService: TasksService, private _subtasksService: SubtasksService, private cd: ChangeDetectorRef ) {}
 
   ngOnInit(): void {
     this.urlParam = this.route.snapshot.params['url'];
@@ -121,4 +121,7 @@ export class SubtasksComponent implements OnInit{
     }
   }
 
+  redirectToTasks(){
+    this.router.navigate(['/tasks']);
+  }
 }
