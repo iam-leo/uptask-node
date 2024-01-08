@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { of, switchMap } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent, FooterComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })

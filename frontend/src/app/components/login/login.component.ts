@@ -3,11 +3,12 @@ import { LoginService } from '../../services/login.service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'login',
   standalone: true,
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, FooterComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
