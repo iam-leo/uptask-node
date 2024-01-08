@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,6 @@ export class UserService {
   constructor( private http: HttpClient ) { }
 
   getUserName(): Observable<any>{
-    return this.http.get('http://localhost:3000/name-user', { withCredentials: true });
+    return this.http.get(`${environment.baseUrl}/name-user`, { withCredentials: true });
   }
 }
