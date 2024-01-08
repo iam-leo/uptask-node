@@ -7,13 +7,14 @@ import { AccountConfirmedComponent } from './components/account-confirmed/accoun
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { NewPasswordComponent } from './components/new-password/new-password.component';
 import { authGuard } from './guards/auth.guard';
+import { noAuthGuard } from './guards/no-auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
     { path: 'tasks', component: TasksComponent, canActivate: [authGuard] },
     { path: 'task/:url', component: SubtasksComponent, canActivate: [authGuard] },
-    { path: 'new-account', component: NewUserComponent},
+    { path: 'new-account', component: NewUserComponent, canActivate: [noAuthGuard] },
     { path: 'account/:name', component: AccountConfirmedComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'reset-password/:token', component: NewPasswordComponent },
