@@ -14,6 +14,6 @@ export class LoginService {
   }
 
   logout(): Observable<any>{
-    return this.http.get('http://localhost:3000/logout');
+    return this.http.get('http://localhost:3000/logout', { withCredentials: true });
   }
 }
