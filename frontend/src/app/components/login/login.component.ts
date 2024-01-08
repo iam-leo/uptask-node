@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'login',
@@ -14,7 +15,7 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  constructor( private _loginService: LoginService, private route: Router ) { }
+  constructor( private _loginService: LoginService, private route: Router, private cookieService: CookieService ) { }
 
   login(email: string, password: string){
 
@@ -25,7 +26,7 @@ export class LoginComponent {
 
     this._loginService.login(credentials).subscribe({
       next: () => {
-        console.log('Has iniciado sesion');
+        this.cookieService.set('auth', 'user authenticated');
         this.route.navigate(['/tasks'])
 
       },

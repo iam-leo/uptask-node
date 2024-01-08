@@ -6,12 +6,13 @@ import { NewUserComponent } from './components/new-user/new-user.component';
 import { AccountConfirmedComponent } from './components/account-confirmed/account-confirmed.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { NewPasswordComponent } from './components/new-password/new-password.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
-    { path: 'tasks', component: TasksComponent },
-    { path: 'task/:url', component: SubtasksComponent },
+    { path: 'tasks', component: TasksComponent, canActivate: [authGuard] },
+    { path: 'task/:url', component: SubtasksComponent, canActivate: [authGuard] },
     { path: 'new-account', component: NewUserComponent},
     { path: 'account/:name', component: AccountConfirmedComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
