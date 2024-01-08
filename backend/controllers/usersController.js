@@ -94,7 +94,7 @@ const getNameUser = async ( req, res ) => {
         const user = await getUserById(userId);
         res.status(200).send({ name: user.name });
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).send({ message: error.message });
     }
 }
 
