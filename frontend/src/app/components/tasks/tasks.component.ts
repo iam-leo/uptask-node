@@ -17,6 +17,8 @@ import { FooterComponent } from '../footer/footer.component';
 export class TasksComponent implements OnInit {
   tasks: any[] = [];
   newTaskInput = '';
+  errorMessage = '';
+  statusError = false;
 
   constructor( private _tasksService: TasksService, private cd: ChangeDetectorRef ){}
 
@@ -49,6 +51,11 @@ export class TasksComponent implements OnInit {
   }
 
   addNewTask(task: string){
+    // Si el input está vacío paramos la ejecución
+    if(!this.validateInputTask(task)){
+      return
+    }
+
     this._tasksService.newTask(task).subscribe((newTask) => {
       this.refreshTasks();
       this.newTaskInput = '';
@@ -68,6 +75,28 @@ export class TasksComponent implements OnInit {
         console.log(err);
       }
     });
+  }
+
+  validateInputTask(task: string){
+    if(task === ''){
+      this.errorMessage = 'Debes escribir una tarea!';
+      this.statusError = true;
+      this.hideError();
+      return false;
+    } else if(task.trim() === ''){
+      this.errorMessage = 'La tarea no puede estar compuesta solo por espacios!';
+      this.statusError = true;
+      this.hideError();
+      return false;
+    }
+    return true;
+  }
+
+  hideError(){
+    setTimeout(() => {
+      this.newTaskInput = '';
+      this.statusError = false;
+    }, 3000);
   }
 
 }
