@@ -1,5 +1,10 @@
 <div class="relative z-50 flex flex-col items-center justify-center w-full h-screen">
     <form class="flex flex-col w-full max-w-xs p-10 mx-auto rounded-lg lg:py-14 lg:max-w-sm bg-white/60">
+        <div class="w-full">
+          @if(errorStatus){
+            <p class="w-full p-2 mb-4 text-center text-white bg-red-600 rounded-md">{{errorMessage}}</p>
+          }
+        </div>
         <div class="mb-5">
           <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Tu email</label>
           <input
@@ -7,6 +12,7 @@
                 type="email"
                 id="email"
                 name="email"
+                (blur)="validateEmail(email)"
                 class="bg-gray-100 border border-gray-300 text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="tucorreo@correo.com"
                 required
@@ -19,6 +25,8 @@
                 type="password"
                 id="password"
                 name="password"
+                placeholder="●●●●●●"
+                (blur)="validatePassword(password)"
                 class="bg-gray-100 border border-gray-300 text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required>
           <a [routerLink]="['/reset-password']" class="block mt-2 text-right text-slate-600 hover:text-slate-800">¿Olvidaste tu contraseña?</a>
