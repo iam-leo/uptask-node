@@ -15,7 +15,7 @@
                 <p class="text-2xl text-center">No tienes subtareas aquí. Empieza agregando una.</p>
             </div>
         }
-        <form class="flex items-center mb-10 mt-14">
+        <form class="flex items-center mt-14">
             <label for="new-subtask" class="sr-only">Nueva subtarea</label>
             <div class="relative w-full">
                 <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
@@ -32,6 +32,7 @@
                         type="text"
                         id="new-subtask"
                         name="new-subtask"
+                        (blur)="validateInputSubtask(newSubtaskInput)"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                         placeholder="Nueva subtarea..."
                         required>
@@ -49,9 +50,14 @@
                 </svg>Agregar
             </button>
         </form>
+        @if(statusError){
+            <div class="w-full mt-6">
+                <p class="w-full p-2 mb-4 text-center text-white bg-red-700 rounded-md">{{errorMessage}}</p>
+            </div>
+        }
 
          <!-- Tasks -->
-         <ul class="flex flex-col items-center justify-center w-full gap-y-5">
+         <ul class="flex flex-col items-center justify-center w-full mt-10 gap-y-5">
             @for( subtask of subtasks; let i = $index; track i){
                 <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40"
                  >

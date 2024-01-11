@@ -29,6 +29,8 @@ export class SubtasksComponent implements OnInit{
   newSubtaskInput = '';
   progressStatus = 0;
   taskCompletedFlag = false;
+  errorMessage = '';
+  statusError = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private _taskService: TasksService, private _subtasksService: SubtasksService, private cd: ChangeDetectorRef ) {}
 
@@ -56,6 +58,11 @@ export class SubtasksComponent implements OnInit{
   }
 
   addNewSubtask(newSubtask: string){
+    // Si el input está vacío paramos la ejecución
+    if(!this.validateInputSubtask(newSubtask)){
+      return
+    }
+
     this._subtasksService.newSubtask(this.currentTask.id, this.newSubtaskInput).subscribe(() => {
       this.refreshSubtasks();
       this.newSubtaskInput = '';
@@ -124,5 +131,27 @@ export class SubtasksComponent implements OnInit{
 
   redirectToTasks(){
     this.router.navigate(['/tasks']);
+  }
+
+  validateInputSubtask(subtask: string){
+    if(subtask === ''){
+      this.errorMessage = 'Debes escribir una subtarea!';
+      this.statusError = true;
+      this.hideError();
+      return false;
+    } else if(subtask.trim() === ''){
+      this.errorMessage = 'La subtarea no puede estar compuesta solo por espacios!';
+      this.statusError = true;
+      this.hideError();
+      return false;
+    }
+    return true;
+  }
+
+  hideError(){
+    setTimeout(() => {
+      this.newSubtaskInput = '';
+      this.statusError = false;
+    }, 3000);
   }
 }
