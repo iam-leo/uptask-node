@@ -40,6 +40,10 @@ const newUser = async ( req, res ) => {
 }
 
 const login = async ( req, res ) => {
+    if (req.authError) {
+        return res.status(401).json({ success: false, message: req.authError });
+    }
+
     const { email, password } = req.body;
 
     if (!email) {
@@ -63,7 +67,7 @@ const login = async ( req, res ) => {
 
         res.status(200).send(user);
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).send({ message: error.message });
     }
 }
 

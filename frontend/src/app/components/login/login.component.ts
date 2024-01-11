@@ -41,7 +41,7 @@ export class LoginComponent {
 
       },
       error: (err) => {
-        console.error('Error al iniciar sesión:', err);
+        this.handleLoginError(err);
       },
     });
   }
@@ -85,5 +85,27 @@ export class LoginComponent {
 
   hideError(){
     setTimeout(()=> this.errorStatus=false ,3000)
+  }
+
+  private handleLoginError(error: any) {
+    // Modifica según la estructura de tu backend y los mensajes de error proporcionados
+    if (error && error.error && error.error.message) {
+      // Error específico del backend
+      if (error.error.message === 'User not found!') {
+        this.errorMessage = 'Usuario no encontrado. Verifica el email ingresado.';
+      } else if (error.error.message === 'Invalid password!') {
+        this.errorMessage = 'Contraseña inválida. Verifica la contraseña ingresada.';
+      } else {
+        console.log('se ejecuta aquí')
+        this.errorMessage = 'Error al intentar iniciar sesión. Por favor, intenta de nuevo más tarde.';
+      }
+    } else {
+      // Error genérico
+      this.errorMessage = 'Error al intentar iniciar sesión. Por favor, intenta de nuevo más tarde.';
+    }
+
+    this.errorStatus = true;
+    this.hideError();
+    console.error('Error al iniciar sesión:', error);
   }
 }
