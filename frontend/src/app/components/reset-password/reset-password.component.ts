@@ -13,17 +13,58 @@ import { Router } from '@angular/router';
 export class ResetPasswordComponent {
   email = '';
   showMessage = false;
+  errorMessage = '';
+  errorStatus = false;
 
   constructor ( private _accountService: AccountService, private router: Router ){ }
 
   resetPassword(email: string){
-    console.log(email)
-    this._accountService.resetPassword(email).subscribe(() => {
-      console.log('Please check your inbox for a password reset link');
-      this.showMessage = true;
-      setTimeout(() => {
-        this.router.navigate(['/']);
-      }, 5000);
+    if(!this.validateEmail(email)){
+      return
+    }
+
+    this._accountService.resetPassword(email).subscribe({
+      next: () => {
+        this.showMessage = true;
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 5000);
+      }, error: (err) => {
+        this.handleLoginError(err);
+      }
     })
+  }
+
+  validateEmail(email: string){
+    if (!email || email.trim() === '') {
+      this.errorMessage = 'El email es requerido.';
+      this.errorStatus = true;
+      this.hideError();
+      return false;
+    } else if (!this.isValidEmail(email)) {
+      this.errorMessage = 'Por favor, ingresa un email válido.';
+      this.errorStatus = true;
+      this.hideError();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  hideError(){
+    setTimeout(()=> this.errorStatus=false ,3000)
+  }
+
+  private handleLoginError(error: any) {
+    if (error.error.message === 'User not found!') {
+      this.errorMessage = 'Usuario no encontrado. Verifica el email ingresado.';
+    }
+    this.errorStatus = true;
+    this.hideError();
   }
 }
