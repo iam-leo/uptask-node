@@ -14,6 +14,9 @@ export class NewPasswordComponent implements OnInit {
   token: string;
   verification = false;
   password = '';
+  errorMessage = '';
+  errorStatus = false;
+  successStatus = false;
 
   constructor( private router: Router, private route: ActivatedRoute, private _accountService: AccountService) {
     this.token = this.route.snapshot.params['token'];
@@ -31,8 +34,36 @@ export class NewPasswordComponent implements OnInit {
   }
 
   newPassword(password: string){
+    if(!this.validatePassword(password)){
+      return
+    }
+
     this._accountService.newPassword(this.token, this.password).subscribe( ()=>{
-      this.router.navigate(['/']);
+      this.successStatus = true;
+
+      setTimeout(() => {
+        this.router.navigate(['/']);
+      }, 3500);
     })
+  }
+
+  validatePassword(password: string){
+    if (!password || password.trim() === '') {
+      this.errorMessage = 'La contraseña es requerida.';
+      this.errorStatus = true;
+      this.hideError();
+      return false;
+    } else if (password.length < 6) {
+      this.errorMessage= 'La contraseña debe tener al menos 6 caracteres.';
+      this.errorStatus = true;
+      this.hideError();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  hideError(){
+    setTimeout(()=> this.errorStatus=false ,3000)
   }
 }
