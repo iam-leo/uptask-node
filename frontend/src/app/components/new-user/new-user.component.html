@@ -1,6 +1,13 @@
 <div class="relative z-50 flex flex-col items-center justify-center w-full h-screen">
     <h2 class="absolute text-4xl text-white top-4">Crea una cuenta</h2>
-    <form class="flex flex-col w-full max-w-xs p-10 mx-auto rounded-lg lg:py-14 lg:max-w-sm bg-white/60">
+    @if(!successStatus){
+      <form class="flex flex-col w-full max-w-xs p-10 mx-auto rounded-lg lg:py-14 lg:max-w-sm bg-white/60">
+      @if(errorStatus){
+        <div class="w-full">
+            <p class="w-full p-2 mb-4 text-center text-white bg-red-600 rounded-md">{{errorMessage}}</p>
+        </div>
+      }
+
         <div class="mb-5">
           <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Tu nombre</label>
           <input
@@ -8,6 +15,7 @@
                 type="text"
                 id="name"
                 name="name"
+                (blur)="validateName(name)"
                 class="bg-gray-100 border border-gray-300 text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Ej: Lisa W. Hart"
                 required
@@ -20,6 +28,7 @@
                 type="email"
                 id="email"
                 name="email"
+                (blur)="validateEmail(email)"
                 class="bg-gray-100 border border-gray-300 text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Ej: correo@correo.com"
                 required
@@ -32,6 +41,7 @@
                   type="password"
                   id="password"
                   name="password"
+                  (blur)="validatePassword(password)"
                   class="bg-gray-100 border border-gray-300 text-gray-900 text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="******"
                   required
@@ -42,7 +52,12 @@
                 class="text-white mb-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase tracking-wider">
                 Crear cuenta
         </button>
-    </form>
+      </form>
+    } @else {
+      <div class="flex flex-col p-6 rounded-md gap-y-4 bg-white/60">
+        <h2 class="text-2xl text-center">✅ Cuenta creada. Revisa tu email para confirmar tu cuenta.</h2>
+      </div>
+    }
     <div class="absolute w-full h-screen -z-10 bg-gradient-to-b from-pink-800/50 via-slate-900/50 to-slate-950/90"></div>
     <div class="absolute w-full h-screen overflow-hidden -z-50">
       <video autoplay loop muted playsinline class="absolute top-0 left-0 object-cover w-full h-full">
