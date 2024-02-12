@@ -1,0 +1,89 @@
+<header-app />
+<div class="flex flex-col items-center w-full">
+    <div class="w-full max-w-5xl mt-14">
+        <form class="flex items-center mb-4">
+            <label for="new-task" class="sr-only">Nueva tarea</label>
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 icon icon-tabler icon-tabler-notes dark:text-gray-400 size-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+                        <path d="M9 7l6 0" />
+                        <path d="M9 11l6 0" />
+                        <path d="M9 15l4 0" />
+                    </svg>
+                </div>
+                <input
+                        [(ngModel)]="newTaskInput"
+                        type="text"
+                        id="new-task"
+                        name="new-task"
+                        (blur)="validateInputTask(newTaskInput)"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                        placeholder="Nueva tarea..."
+                        required>
+            </div>
+
+            <button
+                    (click)="addNewTask(newTaskInput)"
+                    class="inline-flex items-center py-2.5 px-3 ms-2 text-lg font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus size-7 me-2" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                    <path d="M9 12h6" />
+                    <path d="M12 9v6" />
+                </svg>Agregar
+            </button>
+        </form>
+        @if(statusError){
+            <div class="w-full">
+                <p class="w-full p-2 mb-4 text-center text-white bg-red-700 rounded-md">{{errorMessage}}</p>
+            </div>
+        }
+
+        <div class="flex items-center justify-center w-full mb-10 gap-x-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24"><path fill="#ffd75e" d="M20 11h3v2h-3zM1 11h3v2H1zM13 1v3h-2V1zM4.92 3.5l2.13 2.14l-1.42 1.41L3.5 4.93zm12.03 2.13l2.12-2.13l1.43 1.43l-2.13 2.12zM12 6a6 6 0 0 1 6 6c0 2.22-1.21 4.16-3 5.2V19a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-1.8c-1.79-1.04-3-2.98-3-5.2a6 6 0 0 1 6-6m2 15v1a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1zm-3-3h2v-2.13c1.73-.44 3-2.01 3-3.87a4 4 0 0 0-4-4a4 4 0 0 0-4 4c0 1.86 1.27 3.43 3 3.87z"/></svg>
+            <p class="text-xl text-white/75">Tip: Puedes clickear sobre la tarea y agregar subtareas! 😉 </p>
+        </div>
+
+        <!-- Tasks -->
+        <ul class="flex flex-col items-center justify-center w-full gap-y-5">
+            @for(task of tasks; let i = $index; track i){
+                <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40"
+                 >
+                    <button (click)="taskIsCompleted(task.id)">
+                        @if(!task.completed){
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                            </svg>
+                        }
+
+                        @if(task.completed){
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" fill="#ABFEA9" />
+                                <path d="M9 12l2 2l4 -4" />
+                            </svg>
+                        }
+                    </button>
+
+                    <a [routerLink]="['/task', task.url]" class="cursor-pointer" [ngClass]=" task.completed ? 'line-through' : '' "> {{task.title}} </a>
+
+                    <button (click)="deleteTask(task.id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#e53737" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M4 7l16 0" />
+                            <path d="M10 11l0 6" />
+                            <path d="M14 11l0 6" />
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        </svg>
+                    </button>
+        </li>
+            }
+        </ul>
+    </div>
+</div>
+<footer-app />
