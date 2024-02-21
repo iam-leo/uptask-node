@@ -4,49 +4,56 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { FooterComponent } from '../footer/footer.component';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'login',
   standalone: true,
-  imports: [FormsModule, RouterModule, FooterComponent],
+  imports: [FormsModule, RouterModule, FooterComponent, SpinnerComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   email = '';
   password = '';
   errorStatus = false;
   errorMessage = '';
+  showSpinner = false;
 
-  constructor( private _loginService: LoginService, private route: Router, private cookieService: CookieService ) { }
+  constructor(
+    private _loginService: LoginService,
+    private route: Router,
+    private cookieService: CookieService
+  ) {}
 
-  login(email: string, password: string){
-
+  login(email: string, password: string) {
+    this.showSpinner = true;
     const isValidEmail = this.validateEmail(email);
     const isValidPassword = this.validatePassword(password);
 
-    if( !isValidEmail || !isValidPassword ){
-      return
+    if (!isValidEmail || !isValidPassword) {
+      return;
     }
 
     const credentials = {
       email,
-      password
-    }
+      password,
+    };
 
     this._loginService.login(credentials).subscribe({
       next: () => {
         this.cookieService.set('auth', 'user authenticated');
-        this.route.navigate(['/tasks'])
-
+        this.showSpinner = false;
+        this.route.navigate(['/tasks']);
       },
       error: (err) => {
+        this.showSpinner = false;
         this.handleLoginError(err);
       },
     });
   }
 
-  validateEmail(email: string){
+  validateEmail(email: string) {
     if (!email || email.trim() === '') {
       this.errorMessage = 'El email es requerido.';
       this.errorStatus = true;
@@ -67,14 +74,14 @@ export class LoginComponent {
     return emailRegex.test(email);
   }
 
-  validatePassword(password: string){
+  validatePassword(password: string) {
     if (!password || password.trim() === '') {
       this.errorMessage = 'La contraseña es requerida.';
       this.errorStatus = true;
       this.hideError();
       return false;
     } else if (password.length < 6) {
-      this.errorMessage= 'La contraseña debe tener al menos 6 caracteres.';
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
       this.errorStatus = true;
       this.hideError();
       return false;
@@ -83,8 +90,8 @@ export class LoginComponent {
     }
   }
 
-  hideError(){
-    setTimeout(()=> this.errorStatus=false ,3000)
+  hideError() {
+    setTimeout(() => (this.errorStatus = false), 3000);
   }
 
   private handleLoginError(error: any) {
@@ -92,16 +99,20 @@ export class LoginComponent {
     if (error && error.error && error.error.message) {
       // Error específico del backend
       if (error.error.message === 'User not found!') {
-        this.errorMessage = 'Usuario no encontrado. Verifica el email ingresado.';
+        this.errorMessage =
+          'Usuario no encontrado. Verifica el email ingresado.';
       } else if (error.error.message === 'Invalid password!') {
-        this.errorMessage = 'Contraseña inválida. Verifica la contraseña ingresada.';
+        this.errorMessage =
+          'Contraseña inválida. Verifica la contraseña ingresada.';
       } else {
-        console.log('se ejecuta aquí')
-        this.errorMessage = 'Error al intentar iniciar sesión. Por favor, intenta de nuevo más tarde.';
+        console.log('se ejecuta aquí');
+        this.errorMessage =
+          'Error al intentar iniciar sesión. Por favor, intenta de nuevo más tarde.';
       }
     } else {
       // Error genérico
-      this.errorMessage = 'Error al intentar iniciar sesión. Por favor, intenta de nuevo más tarde.';
+      this.errorMessage =
+        'Error al intentar iniciar sesión. Por favor, intenta de nuevo más tarde.';
     }
 
     this.errorStatus = true;
