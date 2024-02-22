@@ -6,85 +6,110 @@ import { of, switchMap } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    HeaderComponent,
+    FooterComponent,
+    SpinnerComponent,
+  ],
   templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.css'
+  styleUrl: './tasks.component.css',
 })
 export class TasksComponent implements OnInit {
   tasks: any[] = [];
   newTaskInput = '';
   errorMessage = '';
   statusError = false;
+  showSpinner = false;
 
-  constructor( private _tasksService: TasksService, private cd: ChangeDetectorRef ){}
+  constructor(
+    private _tasksService: TasksService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.refreshTasks();
   }
 
   refreshTasks() {
-    of(null).pipe(
-      switchMap(() => this._tasksService.getAllTasks())
-    ).subscribe({
-      next: (res) => {
-        this.tasks = res;
-        this.cd.detectChanges(); // Forzar la actualización de la vista
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+    of(null)
+      .pipe(switchMap(() => this._tasksService.getAllTasks()))
+      .subscribe({
+        next: (res) => {
+          this.tasks = res;
+          this.cd.detectChanges(); // Forzar la actualización de la vista
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
 
   taskIsCompleted(id: number) {
     this._tasksService.taskIsCompleted(id).subscribe((data) => {
       // Cambiar el estado en el front
-      const task = this.tasks.find(task => task.id === id);
-        if (task) {
-            task.completed = !task.completed;
-        }
+      const task = this.tasks.find((task) => task.id === id);
+      if (task) {
+        task.completed = !task.completed;
+      }
     });
   }
 
-  addNewTask(task: string){
+  addNewTask(task: string) {
     // Si el input está vacío paramos la ejecución
-    if(!this.validateInputTask(task)){
-      return
+    if (!this.validateInputTask(task)) {
+      return;
     }
+
+    this.showSpinner = true;
 
     this._tasksService.newTask(task).subscribe((newTask) => {
       this.refreshTasks();
       this.newTaskInput = '';
       this.cd.detectChanges();
-    })
+
+      // Ocultar spinner luego de agregar una tarea
+      this.showSpinner = false;
+    });
   }
 
   deleteTask(id: number) {
+    this.showSpinner = true;
     this._tasksService.deleteTask(id).subscribe({
       next: (response) => {
         setTimeout(() => {
           this.refreshTasks();
         }, 200);
         this.cd.detectChanges();
+
+        // Ocultar spinner luego de elimnar la tarea
+        this.showSpinner = false;
       },
       error: (err) => {
         console.log(err);
-      }
+
+        // Ocultar spinner luego de haber fallado la eliminación de la tarea
+        this.showSpinner = false;
+      },
     });
   }
 
-  validateInputTask(task: string){
-    if(task === ''){
+  validateInputTask(task: string) {
+    if (task === '') {
       this.errorMessage = 'Debes escribir una tarea!';
       this.statusError = true;
       this.hideError();
       return false;
-    } else if(task.trim() === ''){
-      this.errorMessage = 'La tarea no puede estar compuesta solo por espacios!';
+    } else if (task.trim() === '') {
+      this.errorMessage =
+        'La tarea no puede estar compuesta solo por espacios!';
       this.statusError = true;
       this.hideError();
       return false;
@@ -92,11 +117,10 @@ export class TasksComponent implements OnInit {
     return true;
   }
 
-  hideError(){
+  hideError() {
     setTimeout(() => {
       this.newTaskInput = '';
       this.statusError = false;
     }, 3000);
   }
-
 }
