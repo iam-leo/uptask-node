@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ["./src/**/*.{html,ts}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        comforta: ["Comfortaa Variable", "ui-sans-serif", "system-ui"],
+      },
+    },
   },
   plugins: [],
-}
+};

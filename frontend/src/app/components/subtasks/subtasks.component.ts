@@ -7,22 +7,35 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'subtasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HeaderComponent,
+    FooterComponent,
+    SpinnerComponent,
+  ],
   templateUrl: './subtasks.component.html',
-  styleUrl: './subtasks.component.css'
+  styleUrl: './subtasks.component.css',
 })
-export class SubtasksComponent implements OnInit{
+export class SubtasksComponent implements OnInit {
   urlParam = '';
-  currentTask: { id: number, title: string, url: string, completed: boolean, UserId: number } = {
+  currentTask: {
+    id: number;
+    title: string;
+    url: string;
+    completed: boolean;
+    UserId: number;
+  } = {
     id: 0,
     title: '',
     url: '',
     completed: false,
-    UserId: 0
+    UserId: 0,
   };
   task = '';
   subtasks: any[] = [];
@@ -31,8 +44,15 @@ export class SubtasksComponent implements OnInit{
   taskCompletedFlag = false;
   errorMessage = '';
   statusError = false;
+  showSpinner = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private _taskService: TasksService, private _subtasksService: SubtasksService, private cd: ChangeDetectorRef ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private _taskService: TasksService,
+    private _subtasksService: SubtasksService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.urlParam = this.route.snapshot.params['url'];
@@ -40,66 +60,85 @@ export class SubtasksComponent implements OnInit{
       this.currentTask = task;
       this.task = task.title;
       this.refreshSubtasks();
-    })
+    });
   }
 
   refreshSubtasks() {
-    of(null).pipe(
-      switchMap(() => this._subtasksService.getSubtasks(this.currentTask.id))
-    ).subscribe({
-      next: (res) => {
-        this.subtasks = res;
-        this.cd.detectChanges(); // Forzar la actualización de la vista
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+    of(null)
+      .pipe(
+        switchMap(() => this._subtasksService.getSubtasks(this.currentTask.id))
+      )
+      .subscribe({
+        next: (res) => {
+          this.subtasks = res;
+          this.cd.detectChanges(); // Forzar la actualización de la vista
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
 
-  addNewSubtask(newSubtask: string){
+  addNewSubtask(newSubtask: string) {
     // Si el input está vacío paramos la ejecución
-    if(!this.validateInputSubtask(newSubtask)){
-      return
+    if (!this.validateInputSubtask(newSubtask)) {
+      return;
     }
 
-    this._subtasksService.newSubtask(this.currentTask.id, this.newSubtaskInput).subscribe(() => {
-      this.refreshSubtasks();
-      this.newSubtaskInput = '';
-      this.cd.detectChanges();
-    });
+    // Mostrar spinner mientras se guarda la subtarea
+    this.showSpinner = true;
+
+    this._subtasksService
+      .newSubtask(this.currentTask.id, this.newSubtaskInput)
+      .subscribe(() => {
+        this.refreshSubtasks();
+        this.newSubtaskInput = '';
+        this.cd.detectChanges();
+
+        // Ocultar spinner luego de agregar subtarea
+        this.showSpinner = false;
+      });
   }
 
   subtaskIsCompleted(id: number) {
     this._subtasksService.subtaskIsCompleted(id).subscribe((data) => {
       // Cambiar el estado en el front
-      const subtask = this.subtasks.find(subtask => subtask.id === id);
-        if (subtask) {
-            subtask.completed = !subtask.completed;
-        }
+      const subtask = this.subtasks.find((subtask) => subtask.id === id);
+      if (subtask) {
+        subtask.completed = !subtask.completed;
+      }
     });
   }
 
   deleteSubtask(id: number) {
+    this.showSpinner = true;
     this._subtasksService.deleteSubtask(id).subscribe({
       next: (response) => {
         setTimeout(() => {
           this.refreshSubtasks();
         }, 200);
         this.cd.detectChanges();
+
+        // Ocultar spinner luego de eliminar la subtarea
+        this.showSpinner = false;
       },
       error: (err) => {
         console.log(err);
-      }
+
+        // Ocultar spinner luego de haber fallado en la eliminacion de la subtarea
+        this.showSpinner = false;
+      },
     });
   }
 
-  progressTask(){
-    if(this.subtasks.length > 0){
-      let completed = this.subtasks.filter(task => task.completed).length;
+  progressTask() {
+    if (this.subtasks.length > 0) {
+      let completed = this.subtasks.filter((task) => task.completed).length;
 
       // Obtener porcentaje de subtareas completadas
-      this.progressStatus = Math.round((completed / this.subtasks.length) * 100);
+      this.progressStatus = Math.round(
+        (completed / this.subtasks.length) * 100
+      );
 
       // Si las subtareas llegaron al 100% y la bandera no está establecida, marcar tarea completada
       if (this.progressStatus === 100 && !this.taskCompletedFlag) {
@@ -121,26 +160,27 @@ export class SubtasksComponent implements OnInit{
     }
   }
 
-  taskCompleted(){
-    if(this.progressStatus == 100){
+  taskCompleted() {
+    if (this.progressStatus == 100) {
       this._taskService.taskIsCompleted(this.currentTask.id).subscribe(() => {
         console.log('Tarea completada');
-      })
+      });
     }
   }
 
-  redirectToTasks(){
+  redirectToTasks() {
     this.router.navigate(['/tasks']);
   }
 
-  validateInputSubtask(subtask: string){
-    if(subtask === ''){
+  validateInputSubtask(subtask: string) {
+    if (subtask === '') {
       this.errorMessage = 'Debes escribir una subtarea!';
       this.statusError = true;
       this.hideError();
       return false;
-    } else if(subtask.trim() === ''){
-      this.errorMessage = 'La subtarea no puede estar compuesta solo por espacios!';
+    } else if (subtask.trim() === '') {
+      this.errorMessage =
+        'La subtarea no puede estar compuesta solo por espacios!';
       this.statusError = true;
       this.hideError();
       return false;
@@ -148,7 +188,7 @@ export class SubtasksComponent implements OnInit{
     return true;
   }
 
-  hideError(){
+  hideError() {
     setTimeout(() => {
       this.newSubtaskInput = '';
       this.statusError = false;

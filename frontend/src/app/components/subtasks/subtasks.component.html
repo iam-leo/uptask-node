@@ -1,49 +1,49 @@
 <header-app />
 <div class="flex flex-col items-center w-full mb-20">
     <div class="w-full max-w-5xl">
-        <h2 class="mt-10 text-4xl font-medium text-white uppercase">Tarea: <span class="font-normal">{{task}}</span></h2>
+        <h2 class="mt-10 text-4xl font-medium text-white uppercase">Tarea: <span class="font-normal">{{task}}</span>
+        </h2>
 
         <div class="flex items-center justify-center max-w-3xl mx-auto mt-10 gap-x-3">
             <p class="text-xl text-white">Progreso: </p>
             <div class="w-full overflow-hidden bg-gray-700 border-2 rounded-full border-slate-800">
-                <div class="p-1 text-base font-medium leading-none text-center text-blue-100 transition-all bg-indigo-600 rounded-full" [style.width]="progressTask()"> {{progressTask()}}</div>
+                <div class="p-1 text-base font-medium leading-none text-center text-blue-100 transition-all bg-indigo-600 rounded-full"
+                    [style.width]="progressTask()"> {{progressTask()}}</div>
             </div>
         </div>
 
         @if(subtasks.length === 0){
-            <div class="p-5 text-white rounded-md mt-14 bg-white/20">
-                <p class="text-2xl text-center">No tienes subtareas aquí. Empieza agregando una.</p>
-            </div>
+        <div class="p-5 text-white rounded-md mt-14 bg-white/20">
+            <p class="text-2xl text-center">No tienes subtareas aquí. Empieza agregando una.</p>
+        </div>
         }
         <form class="flex items-center mt-14">
             <label for="new-subtask" class="sr-only">Nueva subtarea</label>
             <div class="relative w-full">
                 <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 icon icon-tabler icon-tabler-notes dark:text-gray-400 size-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="text-gray-500 icon icon-tabler icon-tabler-notes dark:text-gray-400 size-6"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
                         <path d="M9 7l6 0" />
                         <path d="M9 11l6 0" />
                         <path d="M9 15l4 0" />
                     </svg>
                 </div>
-                <input
-                        [(ngModel)] = "newSubtaskInput"
-                        type="text"
-                        id="new-subtask"
-                        name="new-subtask"
-                        (blur)="validateInputSubtask(newSubtaskInput)"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                        placeholder="Nueva subtarea..."
-                        required>
+                <input [(ngModel)]="newSubtaskInput" type="text" id="new-subtask" name="new-subtask"
+                    (blur)="validateInputSubtask(newSubtaskInput)"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                    placeholder="Nueva subtarea..." required>
             </div>
 
-            <button
-                    (click)="addNewSubtask(newSubtaskInput)"
-                    class="inline-flex items-center py-2.5 px-3 ms-2 text-lg font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus size-7 me-2" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <button (click)="addNewSubtask(newSubtaskInput)"
+                class="inline-flex items-center py-2.5 px-3 ms-2 text-lg font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus size-7 me-2"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
                     <path d="M9 12h6" />
                     <path d="M12 9v6" />
@@ -51,53 +51,69 @@
             </button>
         </form>
         @if(statusError){
-            <div class="w-full mt-6">
-                <p class="w-full p-2 mb-4 text-center text-white bg-red-700 rounded-md">{{errorMessage}}</p>
-            </div>
+        <div class="w-full mt-6">
+            <p class="w-full p-2 mb-4 text-center text-white bg-red-700 rounded-md">{{errorMessage}}</p>
+        </div>
         }
 
-         <!-- Tasks -->
-         <ul class="flex flex-col items-center justify-center w-full mt-10 gap-y-5">
+        @if(showSpinner){
+        <div class="flex items-center justify-center w-full mt-6">
+            <spinner />
+        </div>
+        }
+
+        <!-- Tasks -->
+        <ul class="flex flex-col items-center justify-center w-full mt-10 gap-y-5">
             @for( subtask of subtasks; let i = $index; track i){
-                <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40"
-                 >
-                    <button (click)="subtaskIsCompleted(subtask.id)">
-                        @if(!subtask.completed){
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                            </svg>
-                        }
+            <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40">
+                <button (click)="subtaskIsCompleted(subtask.id)">
+                    @if(!subtask.completed){
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle" width="44"
+                        height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                    </svg>
+                    }
 
-                        @if(subtask.completed){
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" fill="#ABFEA9" />
-                                <path d="M9 12l2 2l4 -4" />
-                            </svg>
-                        }
-                    </button>
+                    @if(subtask.completed){
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="44"
+                        height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" fill="#ABFEA9" />
+                        <path d="M9 12l2 2l4 -4" />
+                    </svg>
+                    }
+                </button>
 
-                    <p class="text-balance" [ngClass]="subtask.completed ? 'line-through' : '' "> {{subtask.description}} </p>
+                <p class="text-balance" [ngClass]="subtask.completed ? 'line-through' : '' "> {{subtask.description}}
+                </p>
 
-                    <button (click)="deleteSubtask(subtask.id)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#e53737" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M4 7l16 0" />
-                            <path d="M10 11l0 6" />
-                            <path d="M14 11l0 6" />
-                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                        </svg>
-                    </button>
-                </li>
+                <button (click)="deleteSubtask(subtask.id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="44"
+                        height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#e53737" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 7l16 0" />
+                        <path d="M10 11l0 6" />
+                        <path d="M14 11l0 6" />
+                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                    </svg>
+                </button>
+            </li>
             }
         </ul>
         <div class="flex items-center justify-center mt-8">
-            <button
-                (click)="redirectToTasks()"
+            <button (click)="redirectToTasks()"
                 class="inline-flex items-center gap-x-2 py-2.5 px-4 ms-2 text-lg font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m9 14l-4-4l4-4"/><path d="M5 10h11a4 4 0 1 1 0 8h-1"/></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="m9 14l-4-4l4-4" />
+                        <path d="M5 10h11a4 4 0 1 1 0 8h-1" />
+                    </g>
+                </svg>
                 Volver
             </button>
         </div>
