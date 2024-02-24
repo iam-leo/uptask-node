@@ -40,7 +40,7 @@
         </div>
         }
 
-        <div class="flex items-center justify-center w-full mb-10 gap-x-3">
+        <div class="flex items-center justify-center w-full mb-10 gap-x-3 animate-bounce">
             @if(!showSpinner){
             <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24">
                 <path fill="#ffd75e"
@@ -54,9 +54,10 @@
 
 
         <!-- Tasks -->
-        <ul class="flex flex-col items-center justify-center w-full gap-y-5">
+        <ul class="flex flex-col items-center justify-center w-full h-full gap-y-5">
             @for(task of tasks; let i = $index; track i){
-            <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40">
+            <li
+                class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40 animate-blurred-fade-in">
                 <button (click)="taskIsCompleted(task.id)">
                     @if(!task.completed){
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle" width="44"

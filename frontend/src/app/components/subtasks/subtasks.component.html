@@ -62,10 +62,11 @@
         </div>
         }
 
-        <!-- Tasks -->
+        <!-- Subtasks -->
         <ul class="flex flex-col items-center justify-center w-full mt-10 gap-y-5">
             @for( subtask of subtasks; let i = $index; track i){
-            <li class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40">
+            <li
+                class="flex items-center justify-between w-full p-3 text-2xl text-black rounded-md bg-white/40 animate-blurred-fade-in">
                 <button (click)="subtaskIsCompleted(subtask.id)">
                     @if(!subtask.completed){
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle" width="44"
