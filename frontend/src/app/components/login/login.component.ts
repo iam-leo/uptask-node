@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email = '';
   password = '';
   errorStatus = false;
@@ -25,6 +25,14 @@ export class LoginComponent {
     private route: Router,
     private cookieService: CookieService
   ) {}
+
+  ngOnInit(): void {
+    document.body.classList.add('login-page');
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('login-page');
+  }
 
   login(email: string, password: string) {
     this.showSpinner = true;

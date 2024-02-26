@@ -64,3 +64,7 @@ body {
     ),
     linear-gradient(90deg, rgb(245, 16, 17), rgb(177, 69, 207));
 }
+
+body.login-page app-root {
+  padding: 0;
+}
