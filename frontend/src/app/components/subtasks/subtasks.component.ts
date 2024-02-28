@@ -151,7 +151,7 @@ export class SubtasksComponent implements OnInit {
         this.taskCompletedFlag = false;
 
         // Cambiar estado de tarea completa a incompleta
-        this.taskCompleted();
+        this.taskNotCompleted();
       }
 
       return this.progressStatus + '%';
@@ -161,9 +161,20 @@ export class SubtasksComponent implements OnInit {
   }
 
   taskCompleted() {
-    if (this.progressStatus == 100) {
+    if (this.progressStatus === 100 && !this.currentTask.completed) {
+      // Actualizamos el estado de la tarea.
       this._taskService.taskIsCompleted(this.currentTask.id).subscribe(() => {
         console.log('Tarea completada');
+      });
+    }
+  }
+
+  taskNotCompleted() {
+    if (this.progressStatus !== 100 && this.currentTask.completed) {
+      this.currentTask.completed = false; // Actualiza el estado de la tarea
+      // Actualizamos el estado de la tarea.
+      this._taskService.taskIsCompleted(this.currentTask.id).subscribe(() => {
+        console.log('Tarea incompletada');
       });
     }
   }
