@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { SubtasksService } from '../../services/subtasks.service';
 
 @Component({
   selector: 'tasks',
@@ -31,6 +32,7 @@ export class TasksComponent implements OnInit {
 
   constructor(
     private _tasksService: TasksService,
+    private _subtasksService: SubtasksService,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -58,7 +60,30 @@ export class TasksComponent implements OnInit {
       const task = this.tasks.find((task) => task.id === id);
       if (task) {
         task.completed = !task.completed;
+
+        // Llamar al método para actualizar los estados de las subtareas
+        this.updateSubtasksStatus(task.id, task.completed);
       }
+    });
+  }
+
+  updateSubtasksStatus(taskId: number, completed: boolean) {
+    // Obtener subtareas de la tarea actual
+    this._subtasksService.getSubtasks(taskId).subscribe((subtasks) => {
+      // Filtrar subtareas según su estado actual
+      const subtasksToUpdate = subtasks.filter(
+        (subtask: any) => subtask.completed !== completed
+      );
+
+      // Actualizar el estado de cada subtarea
+      subtasksToUpdate.forEach((subtask: any) => {
+        subtask.completed = completed;
+
+        // Llamar al método para marcar la subtarea como completa o incompleta
+        this._subtasksService
+          .subtaskIsCompleted(subtask.id)
+          .subscribe(() => {});
+      });
     });
   }
 
